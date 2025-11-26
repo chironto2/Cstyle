@@ -83,27 +83,52 @@ async function seed() {
 
     // Create admin user
     console.log('👤 Creating admin user...');
-    const hashedAdminPassword = await bcrypt.hash('admin123', 10);
+    const hashedAdminPassword = await bcrypt.hash('Admin@123', 10);
     const adminUser = await User.create({
       name: 'Admin User',
-      email: 'admin@cstyle.com',
+      email: 'admin@demo.com',
       phone: '+1-234-567-8900',
       password: hashedAdminPassword,
       role: 'admin',
       isActive: true,
     });
     console.log(
-      '✅ Admin created - Email: admin@cstyle.com, Password: admin123'
+      '✅ Admin created - Email: admin@demo.com, Password: Admin@123'
     );
 
-    // Create regular users
-    console.log('👤 Creating regular users...');
-    const hashedUserPassword = await bcrypt.hash('user123', 10);
+    // Create demo customer users
+    console.log('👤 Creating demo customer users...');
+    const hashedDemoPassword = await bcrypt.hash('Demo@123', 10);
+    const demoUsers = await User.insertMany([
+      {
+        name: 'Demo Customer 1',
+        email: 'customer1@demo.com',
+        phone: '+1-555-0101',
+        password: hashedDemoPassword,
+        role: 'user',
+        isActive: true,
+      },
+      {
+        name: 'Demo Customer 2',
+        email: 'customer2@demo.com',
+        phone: '+1-555-0102',
+        password: hashedDemoPassword,
+        role: 'user',
+        isActive: true,
+      },
+    ]);
+    console.log(
+      '✅ 2 demo customers created - Password: Demo@123'
+    );
+
+    // Create additional regular users for testing
+    console.log('👤 Creating additional test users...');
+    const hashedUserPassword = await bcrypt.hash('Test@123', 10);
     const regularUsers = await User.insertMany([
       {
         name: 'John Doe',
         email: 'john@example.com',
-        phone: '+1-555-0101',
+        phone: '+1-555-0103',
         password: hashedUserPassword,
         role: 'user',
         isActive: true,
@@ -111,29 +136,13 @@ async function seed() {
       {
         name: 'Sarah Johnson',
         email: 'sarah@example.com',
-        phone: '+1-555-0102',
-        password: hashedUserPassword,
-        role: 'user',
-        isActive: true,
-      },
-      {
-        name: 'Michael Chen',
-        email: 'michael@example.com',
-        phone: '+1-555-0103',
-        password: hashedUserPassword,
-        role: 'user',
-        isActive: true,
-      },
-      {
-        name: 'Emma Smith',
-        email: 'emma@example.com',
         phone: '+1-555-0104',
         password: hashedUserPassword,
         role: 'user',
         isActive: true,
       },
     ]);
-    console.log('✅ 4 regular users created - Password: user123');
+    console.log('✅ 2 additional test users created - Password: Test@123');
 
     // Create categories
     console.log('📂 Creating categories...');
@@ -387,19 +396,29 @@ async function seed() {
     console.log('✅ 6 sample products created');
 
     console.log('\n🎉 Database seeded successfully!\n');
-    console.log('📝 Default Credentials:');
-    console.log('   Admin - Email: admin@cstyle.com, Password: admin123');
-    console.log('   Users - Password: user123');
-    console.log('     - john@example.com');
-    console.log('     - sarah@example.com');
-    console.log('     - michael@example.com');
-    console.log('     - emma@example.com\n');
+    console.log('📝 Demo Credentials:');
+    console.log('   👤 Admin User:');
+    console.log('      Email: admin@demo.com');
+    console.log('      Password: Admin@123');
+    console.log('');
+    console.log('   🛍️  Demo Customer 1:');
+    console.log('      Email: customer1@demo.com');
+    console.log('      Password: Demo@123');
+    console.log('');
+    console.log('   🛍️  Demo Customer 2:');
+    console.log('      Email: customer2@demo.com');
+    console.log('      Password: Demo@123');
+    console.log('');
+    console.log('   📧 Test Users:');
+    console.log('      Password: Test@123');
+    console.log('      Emails: john@example.com, sarah@example.com\n');
     console.log('📊 Database Summary:');
     console.log('   - 1 Admin User');
-    console.log('   - 4 Regular Users');
+    console.log('   - 2 Demo Customer Users');
+    console.log('   - 2 Test Users');
     console.log('   - 4 Categories');
     console.log('   - 6 Products');
-    console.log('\n💡 Tip: Use admin credentials to access the admin dashboard and manage products/images.\n');
+    console.log('\n💡 Tip: Use demo credentials to test the application. Admin can manage products and dashboard.\n');
 
     process.exit(0);
   } catch (error) {
@@ -409,184 +428,5 @@ async function seed() {
 }
 
 seed();
-      email: 'user@example.com',
-      password: hashedUserPassword,
-      role: 'user',
-      isActive: true,
-    });
-    console.log('✅ User created - Email: user@example.com, Password: user123');
-
-    // Create categories
-    console.log('📂 Creating categories...');
-    const categories = await Category.insertMany([
-      {
-        name: 'Men',
-        description: 'Mens clothing collection',
-        imageUrl: 'https://placehold.co/400x500.png',
-        isActive: true,
-      },
-      {
-        name: 'Women',
-        description: 'Womens clothing collection',
-        imageUrl: 'https://placehold.co/400x500.png',
-        isActive: true,
-      },
-      {
-        name: 'Kids',
-        description: 'Kids clothing collection',
-        imageUrl: 'https://placehold.co/400x500.png',
-        isActive: true,
-      },
-      {
-        name: 'Accessories',
-        description: 'Fashion accessories',
-        imageUrl: 'https://placehold.co/400x500.png',
-        isActive: true,
-      },
-    ]);
-    console.log('✅ 4 categories created');
-
-    // Create sample products
-    console.log('🛍️  Creating sample products...');
-    const products = await Product.insertMany([
-      {
-        name: 'Classic Cotton T-Shirt',
-        category: 'Men',
-        description:
-          'Comfortable and durable cotton t-shirt perfect for everyday wear',
-        price: 29.99,
-        discountType: 'percentage',
-        discountValue: 10,
-        stock: 150,
-        imageUrls: [
-          'https://placehold.co/400x500.png?text=T-Shirt+Front',
-          'https://placehold.co/400x500.png?text=T-Shirt+Back',
-        ],
-        colors: [
-          {
-            name: 'Black',
-            hex: '#000000',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'White',
-            hex: '#FFFFFF',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'Blue',
-            hex: '#0000FF',
-            image: 'https://placehold.co/50x50.png',
-          },
-        ],
-        sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-        specifications: [
-          { name: 'Material', value: '100% Cotton' },
-          { name: 'Care', value: 'Machine wash cold' },
-        ],
-        isActive: true,
-      },
-      {
-        name: 'Premium Denim Jeans',
-        category: 'Women',
-        description:
-          'Stylish and comfortable premium denim jeans for all occasions',
-        price: 79.99,
-        discountType: 'fixed',
-        discountValue: 10,
-        stock: 80,
-        imageUrls: ['https://placehold.co/400x500.png?text=Jeans'],
-        colors: [
-          {
-            name: 'Dark Blue',
-            hex: '#00008B',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'Light Blue',
-            hex: '#87CEEB',
-            image: 'https://placehold.co/50x50.png',
-          },
-        ],
-        sizes: ['24', '26', '28', '30', '32'],
-        specifications: [
-          { name: 'Material', value: '98% Cotton, 2% Elastane' },
-          { name: 'Rise', value: 'Mid-rise' },
-        ],
-        isActive: true,
-      },
-      {
-        name: 'Kids Summer Dress',
-        category: 'Kids',
-        description: 'Adorable and colorful summer dress for kids',
-        price: 39.99,
-        stock: 120,
-        imageUrls: ['https://placehold.co/400x500.png?text=Kids+Dress'],
-        colors: [
-          {
-            name: 'Pink',
-            hex: '#FFC0CB',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'Purple',
-            hex: '#800080',
-            image: 'https://placehold.co/50x50.png',
-          },
-        ],
-        sizes: ['2-3Y', '4-5Y', '6-7Y', '8-9Y'],
-        specifications: [
-          { name: 'Material', value: 'Cotton Blend' },
-          { name: 'Sleeve', value: 'Sleeveless' },
-        ],
-        isActive: true,
-      },
-      {
-        name: 'Leather Handbag',
-        category: 'Accessories',
-        description: 'Elegant leather handbag for everyday use',
-        price: 149.99,
-        discountType: 'percentage',
-        discountValue: 15,
-        stock: 50,
-        imageUrls: ['https://placehold.co/400x500.png?text=Handbag'],
-        colors: [
-          {
-            name: 'Black',
-            hex: '#000000',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'Brown',
-            hex: '#8B4513',
-            image: 'https://placehold.co/50x50.png',
-          },
-          {
-            name: 'Red',
-            hex: '#FF0000',
-            image: 'https://placehold.co/50x50.png',
-          },
-        ],
-        sizes: [],
-        specifications: [
-          { name: 'Material', value: 'Genuine Leather' },
-          { name: 'Compartments', value: '3 main + 6 smaller' },
-        ],
-        isActive: true,
-      },
-    ]);
-    console.log('✅ 4 sample products created');
-
-    console.log('\n🎉 Database seeded successfully!\n');
-    console.log('📝 Default Credentials:');
-    console.log('   Admin - Email: admin@cstyle.com, Password: admin123');
-    console.log('   User  - Email: user@example.com, Password: user123\n');
-
-    process.exit(0);
-  } catch (error) {
-    console.error('❌ Seeding failed:', error.message);
-    process.exit(1);
-  }
-}
 
 seed();
